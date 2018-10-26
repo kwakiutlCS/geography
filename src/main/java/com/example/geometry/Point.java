@@ -13,4 +13,9 @@ public class Point {
     public double[] getCoordinates() {
         return new double[]{longitude, latitude};
     }
+    
+    public String toString() {
+    	return "{\"properties\":{}, \"geometry\":{\"type\": \"Point\", \"coordinates\": ["+
+    				longitude +", "+ latitude + "]}},";
+    }
 }
