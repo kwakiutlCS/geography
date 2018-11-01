@@ -15,6 +15,18 @@ public class GeoUtils extends GeoHashUtils {
     public static String south(String geohash) {
         return GeoHashUtils.north(geohash);
     }
+    
+    public static String northeast(String geohash) {
+    	return north(east(geohash));
+    }
+    
+    public static String southwest(String geohash) {
+    	return south(west(geohash));
+    }
+    
+    public static String encode(Point point) {
+    	return GeoHashUtils.encode(point.getCoordinates()[1], point.getCoordinates()[0], 5);
+    }
 
     public static Set<String> geoHashesForPolygon(int length, double[][] points, boolean uniform) {
         Set<String> subhashes = GeoHashUtils.geoHashesForPolygon(length, points);
@@ -61,7 +73,7 @@ public class GeoUtils extends GeoHashUtils {
         return radius*c;
     }
 
-    private static List<String> geoHashLine(int length, String start, Function<String, String> direction) {
+    public static List<String> geoHashLine(int length, String start, Function<String, String> direction) {
         return geoHashLine(length, start, direction, new ArrayList<>());
     }
 

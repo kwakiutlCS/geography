@@ -14,6 +14,10 @@ public class Point {
         return new double[]{longitude, latitude};
     }
     
+    public Point execute(Movement movement) {
+    	return new Point(longitude+movement.getLongitudeDelta(), latitude+movement.getLatitudeDelta());
+    }
+    
     public String toString() {
     	return "{\"properties\":{}, \"geometry\":{\"type\": \"Point\", \"coordinates\": ["+
     				longitude +", "+ latitude + "]}},";
