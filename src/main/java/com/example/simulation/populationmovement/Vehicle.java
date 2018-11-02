@@ -39,8 +39,8 @@ public class Vehicle {
 				movement = Movement.generateRandomMovement(stepDistance);
 			} else {
 				movement = executedMovements.peek()
-						.scale(1-config.getRandomWalk())
-						.plus(Movement.generateRandomMovement(stepDistance).scale(config.getRandomWalk()))
+						.scale(1-config.randomWalk)
+						.plus(Movement.generateRandomMovement(stepDistance).scale(config.randomWalk))
 						.scaleTo(stepDistance);
 			}
 
@@ -65,11 +65,12 @@ public class Vehicle {
 		System.out.println("Car started - "+position);
 		
 		Random rand = new Random();
-		this.totalDistance = (config.getMaxDistance()-config.getMinDistance()) * rand.nextDouble() + config.getMinDistance();
+		
+		this.totalDistance = rand.nextGaussian()*config.distDev + config.distMean;
 		this.remainingDistance = totalDistance;
 		
-		double speed = totalDistance > config.getThresholdDistance() ? config.getMaxSpeed() : config.getMinSpeed();
-		this.stepDistance = speed * config.getStep();
+		double speed = rand.nextGaussian()*config.speedDev + config.speedMean;
+		this.stepDistance = speed * config.step;
 	}
 	
 	public void startControllers() {

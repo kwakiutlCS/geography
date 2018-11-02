@@ -12,17 +12,20 @@ public class PopulationMovement {
 
 	public static void execute(List<Point> population) {
 		
-		MovementConfig config = new MovementConfig(90, 10, 40, 80, 40, 0.3, 1/30.);
+		MovementConfig config = new MovementConfig(200, 50, 90, 30, 0.2, 1/30.);
 		
 		DataStore store0 = new DefaultStore();
 		DataStore store1 = new DefaultStore();
 		DataStore store2 = new DefaultStore();
+		DataStore store3 = new DefaultStore();
+		
 		
 		List<Vehicle> vehicles = population.stream().map(p -> {
 			List<VehicleController> controllers = Arrays.asList(
 				new VehicleController(store0, 0, 0),
 				new VehicleController(store1, 0, 1),
-				new VehicleController(store2, 1, 2)
+				new VehicleController(store2, 1, 1),
+				new VehicleController(store3, 1, 2)
 			);
 			
 			return new Vehicle(p, controllers, config);
@@ -34,11 +37,12 @@ public class PopulationMovement {
 		while (t < limit) {
 			vehicles.forEach(Vehicle::executeStep);
 			
-			t += config.getStep();
+			t += config.step;
 		}
 		
 		System.out.println(store0.getSubscriptionCounter()+ " - " +store0.getUnsubscriptionCounter());
 		System.out.println(store1.getSubscriptionCounter()+ " - " +store1.getUnsubscriptionCounter());
 		System.out.println(store2.getSubscriptionCounter()+ " - " +store2.getUnsubscriptionCounter());
+		System.out.println(store3.getSubscriptionCounter()+ " - " +store3.getUnsubscriptionCounter());
 	}
 }
