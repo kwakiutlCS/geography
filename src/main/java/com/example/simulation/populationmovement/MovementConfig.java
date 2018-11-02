@@ -13,7 +13,7 @@ public class MovementConfig {
 			double speedDev, double randomWalk, double step) {
 		this.distMean = distMean;
 		this.distDev = distDev;
-		this.randomWalk = randomWalk;
+		this.randomWalk = Math.max(0.001, randomWalk);
 		this.step = step;
 		this.speedMean = speedMean;
 		this.speedDev = speedDev;
