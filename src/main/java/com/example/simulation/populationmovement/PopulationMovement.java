@@ -13,7 +13,7 @@ public class PopulationMovement {
 
 	public static void execute(List<Point> population, Set<String> squares) {
 		
-		MovementConfig config = new MovementConfig(200, 50, 90, 30, 0.2, 1/30.);
+		MovementConfig config = new MovementConfig(30, 5, 50, 5, 0.3, 1/30.);
 		
 		DataStore store0 = new DefaultStore();
 		DataStore store1 = new DefaultStore();
@@ -36,8 +36,15 @@ public class PopulationMovement {
 		double t = 0;
 		double limit = 16;
 		
-		while (t < limit) {
+		while (t < limit/2) {
 			vehicles.forEach(Vehicle::executeStep);
+			
+			t += config.step;
+		}
+		
+		vehicles.forEach(Vehicle::startControllers);
+		while (t < limit) {
+			vehicles.forEach(Vehicle::revertStep);
 			
 			t += config.step;
 		}

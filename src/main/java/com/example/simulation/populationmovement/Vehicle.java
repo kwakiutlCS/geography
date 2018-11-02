@@ -48,6 +48,19 @@ public class Vehicle {
 		}
 	}
 	
+	public void revertStep() {
+		if (!executedMovements.isEmpty()) {
+			position = position.execute(executedMovements.pop().scale(-1));
+			controllers.stream().forEach(vc -> vc.moveTo(position));
+			
+			System.out.println("Car moved - "+position);
+			
+			if (executedMovements.isEmpty()) {
+				stopControllers();
+			}
+		}
+	}
+	
 	private Point generateNewPosition() {
 		Movement movement = null;
 		double randomWalkEnhancer = 1.1;

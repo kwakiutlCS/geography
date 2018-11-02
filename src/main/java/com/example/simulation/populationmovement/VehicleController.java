@@ -87,5 +87,6 @@ public class VehicleController {
 	
 	public void stop() {
 		subscriptions.forEach(s -> store.unsubscribe(s, id));
+		subscriptions.clear();
 	}
 }
