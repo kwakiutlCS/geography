@@ -2,6 +2,7 @@ package com.example.simulation.populationmovement;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.example.geometry.Point;
@@ -10,7 +11,7 @@ import com.example.simulation.datastores.DefaultStore;
 
 public class PopulationMovement {
 
-	public static void execute(List<Point> population) {
+	public static void execute(List<Point> population, Set<String> squares) {
 		
 		MovementConfig config = new MovementConfig(200, 50, 90, 30, 0.2, 1/30.);
 		
@@ -28,7 +29,8 @@ public class PopulationMovement {
 				new VehicleController(store3, 1, 2)
 			);
 			
-			return new Vehicle(p, controllers, config);
+			return new Vehicle(p, controllers, config, squares);
+			
 		}).collect(Collectors.toList());
 		
 		double t = 0;

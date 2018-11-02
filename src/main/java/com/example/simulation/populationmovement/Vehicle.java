@@ -4,6 +4,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import com.example.geometry.GeoUtils;
 import com.example.geometry.Movement;
@@ -14,16 +15,18 @@ public class Vehicle {
 	private Point position;
 	private List<VehicleController> controllers;	
 	private MovementConfig config;
+	private Set<String> domain;
 	
 	private Deque<Movement> executedMovements = new LinkedList<>();
 	private double totalDistance;
 	private double remainingDistance;
 	private double stepDistance;
 		
-	public Vehicle(Point position, List<VehicleController> controllers, MovementConfig config) {
+	public Vehicle(Point position, List<VehicleController> controllers, MovementConfig config, Set<String> domain) {
 		this.position = position;
 		this.controllers = controllers;
 		this.config = config;
+		this.domain = domain;
 		
 		init();
 		startControllers();
@@ -31,34 +34,44 @@ public class Vehicle {
 	
 	public void executeStep() {
 		if (remainingDistance > 0) {
-			Point initialPosition = position;
-
-			Movement movement;
+			Point newPosition = generateNewPosition();
+			remainingDistance -= GeoUtils.distance(newPosition, position);
+			position = newPosition;
 			
-			if (executedMovements.isEmpty()) {
-				movement = Movement.generateRandomMovement(stepDistance);
-			} else {
-				movement = executedMovements.peek()
-						.scale(1-config.randomWalk)
-						.plus(Movement.generateRandomMovement(stepDistance).scale(config.randomWalk))
-						.scaleTo(stepDistance);
-			}
-
-			execute(movement);
-			remainingDistance -= GeoUtils.distance(initialPosition, position);
+			controllers.stream().forEach(vc -> vc.moveTo(position));
+			
+			System.out.println("Car moved - "+position);
+			
 			if (remainingDistance <= 0) {
 				stopControllers();
 			}
 		}
 	}
 	
-	private void execute(Movement movement) {
+	private Point generateNewPosition() {
+		Movement movement = null;
+		double randomWalkEnhancer = 1.1;
+		Point candidatePosition = null;
+		int iteration = 0;
+		
+		while (candidatePosition == null || !domain.contains(GeoUtils.encode(candidatePosition))) {
+			
+			if (executedMovements.isEmpty()) {
+				movement = Movement.generateRandomMovement(stepDistance);
+			} else {
+				double randomWalkModifier = Math.min(1, config.randomWalk*Math.pow(randomWalkEnhancer, iteration));
+				movement = executedMovements.peek()
+						.scale(1-randomWalkModifier)
+						.plus(Movement.generateRandomMovement(stepDistance).scale(randomWalkModifier))
+						.scaleTo(stepDistance);
+			}
+			
+			iteration++;
+			candidatePosition = position.execute(movement);
+		}
+		
 		executedMovements.push(movement);
-		
-		position = position.execute(movement);
-		controllers.stream().forEach(vc -> vc.moveTo(position));
-		
-		System.out.println("Car moved - "+position);
+		return candidatePosition;
 	}
 	
 	private void init() {
