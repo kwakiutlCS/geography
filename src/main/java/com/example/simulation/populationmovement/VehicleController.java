@@ -10,8 +10,6 @@ import com.example.simulation.datastores.DataStore;
 
 public class VehicleController {
 
-	private String id = UUID.randomUUID().toString();
-	
 	private DataStore store;
 	
 	private int threshold;
@@ -31,7 +29,7 @@ public class VehicleController {
 		this.subscription = subscription;
 	}
 	
-	public void moveTo(Point destination) {
+	public void moveTo(Point destination, String id) {
 		if (destination.getCoordinates()[0] > maxLon || destination.getCoordinates()[0] < minLon ||
 			destination.getCoordinates()[1] > maxLat || destination.getCoordinates()[1] < minLat) {
 			
@@ -39,7 +37,7 @@ public class VehicleController {
 			
 			calculateNewThreshold(currentGeohash);
 			
-			calculateNewSubscriptions(currentGeohash);
+			calculateNewSubscriptions(currentGeohash, id);
 		}
 	}
 	
@@ -61,7 +59,7 @@ public class VehicleController {
 		minLat = swBB[0];
 	}
 	
-	private void calculateNewSubscriptions(String geohash) {
+	private void calculateNewSubscriptions(String geohash, String id) {
 		Set<String> newSubscriptions = GeoUtils.geoHashGrid(subscription, geohash);
 		
 		subscriptions.forEach(s -> {
@@ -79,13 +77,13 @@ public class VehicleController {
 		subscriptions = newSubscriptions;
 	}
 
-	public void start(Point position) {
+	public void start(Point position, String id) {
 		String currentGeohash = GeoUtils.encode(position);
 		calculateNewThreshold(currentGeohash);
-		calculateNewSubscriptions(currentGeohash);
+		calculateNewSubscriptions(currentGeohash, id);
 	}
 	
-	public void stop() {
+	public void stop(String id) {
 		subscriptions.forEach(s -> store.unsubscribe(s, id));
 		subscriptions.clear();
 	}

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class DefaultStore implements DataStore {
+public class AlternativeStore implements DataStore {
 
 	private long subscriptionCounter = 0;
 	private long unsubscriptionCounter = 0;
@@ -93,6 +93,6 @@ public class DefaultStore implements DataStore {
 
 	@Override
 	public boolean enlarged() {
-		return false;
+		return true;
 	}
 }
