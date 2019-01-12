@@ -18,7 +18,7 @@ public class App {
     	List<String> lines = Files.lines(Paths.get("data/tiles-weights.csv"))
 					.collect(Collectors.toList());
 		
-    	List<Point> positions = PopulationCreation.execute(lines, 10000);
+    	List<Point> positions = PopulationCreation.execute(lines, 100);
     	
     	Set<String> squares = lines.stream().map(l -> l.split(",")[0]).collect(Collectors.toSet());
     	

@@ -21,7 +21,7 @@ public class PopulationMovement {
 
 	public static void execute(List<Point> population, Set<String> squares) throws IOException {
 		
-		MovementConfig config = new MovementConfig(500, 1, 100, 10, 0.1, 1/30.);
+		MovementConfig config = new MovementConfig(30, 3, 60, 5, 0.2, 1/30.);
 		
 		DataStore store0 = new DefaultStore();
 		DataStore store1 = new DefaultStore();
@@ -31,7 +31,7 @@ public class PopulationMovement {
 		
 		StrategyComparator sc = new StrategyComparator(store3, store4);
 		
-		List<Alert> alerts = Files.lines(Paths.get("data/weather.json"))
+		List<Alert> alerts = Files.lines(Paths.get("data/filter/de.csv"))
 				.map(line -> {
 					String[] items = line.trim().split(",");
 					PolygonBuilder pb = PolygonBuilder.create();
@@ -65,7 +65,7 @@ public class PopulationMovement {
 		double limit = 24;
 		double lastAlert = 0;
 		
-		while (t < limit/2) {
+		while (t < limit) {
 			vehicles.forEach(Vehicle::executeStep);
 			
 			t += config.step;
@@ -79,25 +79,28 @@ public class PopulationMovement {
 			
 		}
 		
-		vehicles.forEach(Vehicle::startControllers);
-		while (t < limit) {
-			vehicles.forEach(Vehicle::revertStep);
-			
-			t += config.step;
-			lastAlert += config.step;
-			
-			if (lastAlert > 0.1667) {
-				lastAlert = 0;
-				alertController.executeStep();
-				sc.analyse();
-			}
-		}
+//		vehicles.forEach(Vehicle::startControllers);
+//		while (t < limit) {
+//			vehicles.forEach(Vehicle::revertStep);
+//			
+//			t += config.step;
+//			lastAlert += config.step;
+//			
+//			if (lastAlert > 0.1667) {
+//				lastAlert = 0;
+//				alertController.executeStep();
+//				sc.analyse();
+//			}
+//		}
 		
+		System.out.println("SUBSCRIPTIONS");
 		System.out.println(store0.getSubscriptionCounter()+ " - " +store0.getUnsubscriptionCounter());
 		System.out.println(store1.getSubscriptionCounter()+ " - " +store1.getUnsubscriptionCounter());
 		System.out.println(store2.getSubscriptionCounter()+ " - " +store2.getUnsubscriptionCounter());
 		System.out.println(store3.getSubscriptionCounter()+ " - " +store3.getUnsubscriptionCounter());
 		System.out.println(store4.getSubscriptionCounter()+ " - " +store4.getUnsubscriptionCounter());
+		
+		System.out.println("\nALERTS");
 		
 		System.out.println(store0.getAlertsCounter()+ " - "+store0.getAlertsSended());
 		System.out.println(store1.getAlertsCounter()+ " - "+store1.getAlertsSended());
@@ -105,6 +108,7 @@ public class PopulationMovement {
 		System.out.println(store3.getAlertsCounter()+ " - "+store3.getAlertsSended());
 		System.out.println(store4.getAlertsCounter()+ " - "+store4.getAlertsSended());
 		
+		System.out.println();
 		System.out.println(sc.getBaseUniqueAlerts()+" - "+sc.getBaseTotalAlerts()+ " - "+sc.getBaseOnlyAlerts());
 		System.out.println(sc.getChallengerUniqueAlerts()+ " - "+sc.getChallengerTotalAlerts() + " - "+sc.getChallengerOnlyAlerts());
 	}
