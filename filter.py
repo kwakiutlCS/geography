@@ -1,6 +1,6 @@
 import sys, re, os
 
-eventsFile = open(sys.argv[1], "r")
+eventsFile = open("events", "r")
 events = [e.split("=")[0] for e in eventsFile.readlines() if "#" not in e]
 eventsFile.close()
 
@@ -30,7 +30,7 @@ def getFilteredWarnings(filename):
 def writeData(path, data):
     regex = "\"coordinates\":(\[\[\[[\d,\[\]\.\-]*\]\]\])"
 
-    f = open("filter/"+path, "w")
+    f = open("foreca/filter/"+path, "w")
 
     for line in data:
         matchers = re.finditer(regex, line)
@@ -50,7 +50,7 @@ def writeData(path, data):
     f.close()
 
 
-for files in os.walk("foreca"):
+for files in os.walk("foreca/foreca"):
     subfolder = files[0]
     filenames = files[2]
 
