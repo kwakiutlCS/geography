@@ -32,53 +32,53 @@ public class App {
 	
 	public static void main( String[] args ) throws IOException {
 
-//    	List<String> lines = Files.lines(Paths.get("data/tiles-weights.csv"))
-//					.collect(Collectors.toList());
-//		
-//    	List<Point> positions = PopulationCreation.execute(lines, 100);
-//    	
-//    	Set<String> squares = lines.stream().map(l -> l.split(",")[0]).collect(Collectors.toSet());
-//    	
-//    	
-//		
-//		try (Stream<Path> paths = Files.walk(Paths.get("foreca/filter"))) {
-//		    paths
-//		        .filter(Files::isRegularFile)
-//		        .filter(p -> p.getFileName().toString().split("\\.")[0].equals("ca"))
-//		        .forEach(p -> {
-//		        	try {
-//						PopulationMovement.execute(positions, squares, p);
-//					} catch (IOException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//		        });
-//		} 
+    	List<String> lines = Files.lines(Paths.get("data/tiles-weights.csv"))
+					.collect(Collectors.toList());
 		
+    	List<Point> positions = PopulationCreation.execute(lines, 100);
+    	
+    	Set<String> squares = lines.stream().map(l -> l.split(",")[0]).collect(Collectors.toSet());
+    	
+    	
 		
 		try (Stream<Path> paths = Files.walk(Paths.get("foreca/filter"))) {
 		    paths
 		        .filter(Files::isRegularFile)
-		        //.filter(p -> p.getFileName().toString().split("\\.")[1].equals("csv"))
-		        .forEach(f -> {
-					try {
-						calculate(f);
+		        .filter(p -> p.getFileName().toString().split("\\.")[0].equals("us"))
+		        .forEach(p -> {
+		        	try {
+						PopulationMovement.execute(positions, squares, p);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				});
+		        });
 		} 
 		
-		for (String key : geohashes5.keySet()) {
-			System.out.println("\n\n");
-			System.out.println(key);
-			System.out.println(geohashes5.get(key));
-			System.out.println(enlarged5.get(key));
-			System.out.println(geohashes4.get(key));
-			System.out.println(geohashes3.get(key));
-            
-		}
+		
+//		try (Stream<Path> paths = Files.walk(Paths.get("foreca/filter"))) {
+//		    paths
+//		        .filter(Files::isRegularFile)
+//		        .filter(p -> p.getFileName().toString().equals("pl.csv"))
+//		        .forEach(f -> {
+//					try {
+//						calculate(f);
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				});
+//		} 
+//		
+//		for (String key : geohashes5.keySet()) {
+//			System.out.println("\n\n");
+//			System.out.println(key);
+//			System.out.println(geohashes5.get(key));
+//			System.out.println(enlarged5.get(key));
+//			System.out.println(geohashes4.get(key));
+//			System.out.println(geohashes3.get(key));
+//            
+//		}
     }
 	
 	private static void calculate(Path path) throws IOException {

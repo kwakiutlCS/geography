@@ -11,6 +11,13 @@ public class DefaultStore implements DataStore {
 	private long unsubscriptionCounter = 0;
 	private long alertsReceived = 0;
 	private long alertsSended = 0;
+	private boolean enlarged = false;
+	
+	public DefaultStore() { }
+	
+	public DefaultStore(boolean enlarged) {
+	    this.enlarged = enlarged;
+	}
 	
 	private Map<String, Set<String>> subscriptions = new HashMap<>();
 	
@@ -93,6 +100,6 @@ public class DefaultStore implements DataStore {
 
 	@Override
 	public boolean enlarged() {
-		return false;
+		return enlarged;
 	}
 }

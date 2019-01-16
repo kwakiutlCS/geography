@@ -28,7 +28,7 @@ public class PopulationMovement {
 //		DataStore store1 = new DefaultStore();
 //		DataStore store2 = new DefaultStore();
 		DataStore store3 = new DefaultStore();
-		DataStore store4 = new AlternativeStore();
+		DataStore store4 = new DefaultStore(true);
 		
 		StrategyComparator sc = new StrategyComparator(store3, store4);
 		
